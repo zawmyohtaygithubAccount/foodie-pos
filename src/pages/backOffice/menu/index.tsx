@@ -4,7 +4,7 @@ import { Menus } from "@/types/menuType";
 import { Button } from "@mui/material";
 import Box from "@mui/material/Box/Box";
 import { useState } from "react";
-import { CreateMenuPage } from "./CreateMenuPage";
+import { CreateMenuPage } from "../../../components/menu/CreateMenuPage";
 
 const Menu = () => {
   const [open, setOpen] = useState<boolean>(false);

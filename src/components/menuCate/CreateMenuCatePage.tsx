@@ -1,10 +1,12 @@
 import config from "@/config";
-import { Counter, Menus } from "@/types/menuType";
+import { Counter, Scounter } from "@/types/menuCateTypes";
 import {
   Button,
   Dialog,
   DialogContent,
   DialogTitle,
+  FormControlLabel,
+  Switch,
   TextField,
 } from "@mui/material";
 import { useState } from "react";
@@ -12,32 +14,37 @@ import { useState } from "react";
 interface Props {
   open: boolean;
   setOpen: (open: boolean) => void;
-  setMenus: (menus: Menus[]) => void;
+  setMenuCate: (menuCate: Scounter[]) => void;
 }
-export const CreateMenuPage = ({ open, setOpen, setMenus }: Props) => {
-  const [counter, setCounter] = useState<Counter>({
-    name: "",
-    price: 0,
-    img: "",
-  });
+
+const defaultNewMenuCate = {
+  name: "",
+  isAvaiable: true,
+};
+export const CreateMenuCatePage = ({ open, setOpen, setMenuCate }: Props) => {
+  const [newMenuCate, setNewMenuCate] = useState<Counter>(defaultNewMenuCate);
+
   const createMenu = async () => {
-    const response = await fetch(`${config.apiBaseUrl}/backOffice/menu`, {
+    const response = await fetch(`${config.apiBaseUrl}/menuCate`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
       },
-      body: JSON.stringify(counter),
+      body: JSON.stringify(newMenuCate),
     });
     const dataFromServer = await response.json();
-    setMenus(dataFromServer);
+    setMenuCate(dataFromServer);
+    setOpen(false);
+    setNewMenuCate(defaultNewMenuCate);
   };
+  console.log(newMenuCate);
   return (
     <>
       <Dialog open={open} onClose={() => setOpen(false)}>
         <DialogTitle
           sx={{ display: "flex", justifyContent: "center", fontSize: 25 }}
         >
-          Create Menu
+          Create
         </DialogTitle>
         <DialogContent
           sx={{
@@ -47,25 +54,24 @@ export const CreateMenuPage = ({ open, setOpen, setMenus }: Props) => {
           }}
         >
           <TextField
+            defaultValue={newMenuCate.name}
             onChange={(evt) =>
-              setCounter({ ...counter, name: evt.target.value })
+              setNewMenuCate({ ...newMenuCate, name: evt.target.value })
             }
             sx={{ width: 300, mb: 3 }}
             placeholder="Name"
           />
-          <TextField
-            onChange={(evt) =>
-              setCounter({ ...counter, price: Number(evt.target.value) })
+
+          <FormControlLabel
+            control={
+              <Switch
+                defaultChecked={newMenuCate.isAvaiable}
+                onChange={(evt, value) =>
+                  setNewMenuCate({ ...newMenuCate, isAvaiable: value })
+                }
+              />
             }
-            sx={{ width: 300, mb: 3 }}
-            placeholder="Price"
-          />
-          <TextField
-            onChange={(evt) =>
-              setCounter({ ...counter, img: evt.target.value })
-            }
-            sx={{ width: 300, mb: 3 }}
-            placeholder="Image Address"
+            label="Avaiable"
           />
           <Button
             sx={{ width: "fit-content", margin: "0 auto" }}
