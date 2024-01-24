@@ -10,7 +10,7 @@ const menuCate: MenuCate[] = [];
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
     const isValid = req.body.name;
-    if (!isValid) res.status(400).send("Bat request");
+    if (!isValid) return res.status(400).send("Bat request");
     const menuId =
       menuCate.length === 0 ? 1 : menuCate[menuCate.length - 1].id + 1;
     const newMenu = { ...req.body, id: menuId, isArchive: false };

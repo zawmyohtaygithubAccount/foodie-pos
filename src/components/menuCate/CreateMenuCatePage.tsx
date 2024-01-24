@@ -1,5 +1,7 @@
 import config from "@/config";
-import { Counter, Scounter } from "@/types/menuCateTypes";
+import { useAppDispatch } from "@/store/hook";
+import { setMenuCategories } from "@/store/slices/menuCateSlice";
+import { Counter } from "@/types/menuCateTypes";
 import {
   Button,
   Dialog,
@@ -14,15 +16,15 @@ import { useState } from "react";
 interface Props {
   open: boolean;
   setOpen: (open: boolean) => void;
-  setMenuCate: (menuCate: Scounter[]) => void;
 }
 
 const defaultNewMenuCate = {
   name: "",
   isAvaiable: true,
 };
-export const CreateMenuCatePage = ({ open, setOpen, setMenuCate }: Props) => {
+export const CreateMenuCatePage = ({ open, setOpen }: Props) => {
   const [newMenuCate, setNewMenuCate] = useState<Counter>(defaultNewMenuCate);
+  const dispatch = useAppDispatch();
 
   const createMenu = async () => {
     const response = await fetch(`${config.apiBaseUrl}/menuCate`, {
@@ -33,7 +35,7 @@ export const CreateMenuCatePage = ({ open, setOpen, setMenuCate }: Props) => {
       body: JSON.stringify(newMenuCate),
     });
     const dataFromServer = await response.json();
-    setMenuCate(dataFromServer);
+    dispatch(setMenuCategories(dataFromServer));
     setOpen(false);
     setNewMenuCate(defaultNewMenuCate);
   };

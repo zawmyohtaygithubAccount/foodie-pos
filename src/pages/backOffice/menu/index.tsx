@@ -1,6 +1,6 @@
 import BackOfficeLayout from "@/components/backOfficeLayout";
 import { ImageCard } from "@/components/imageCard/ImageCard";
-import { Menus } from "@/types/menuType";
+import { useAppSelector } from "@/store/hook";
 import { Button } from "@mui/material";
 import Box from "@mui/material/Box/Box";
 import { useState } from "react";
@@ -8,7 +8,7 @@ import { CreateMenuPage } from "../../../components/menu/CreateMenuPage";
 
 const Menu = () => {
   const [open, setOpen] = useState<boolean>(false);
-  const [menus, setMenus] = useState<Menus[]>([]);
+  const menus = useAppSelector((store) => store.menu.item);
   return (
     <>
       <BackOfficeLayout>
@@ -16,7 +16,7 @@ const Menu = () => {
           <Button onClick={() => setOpen(true)} variant="contained">
             Create Menu
           </Button>
-          <CreateMenuPage open={open} setOpen={setOpen} setMenus={setMenus} />
+          <CreateMenuPage open={open} setOpen={setOpen} />
         </Box>
         <Box sx={{ mt: 3, ml: 1, display: "flex", flexWrap: "wrap" }}>
           {menus.map((menu) => (

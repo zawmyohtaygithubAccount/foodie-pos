@@ -1,14 +1,14 @@
 import BackOfficeLayout from "@/components/backOfficeLayout";
 import ItemCart from "@/components/itemCart/ItemCart";
 import { CreateMenuCatePage } from "@/components/menuCate/CreateMenuCatePage";
-import { Scounter } from "@/types/menuCateTypes";
+import { useAppSelector } from "@/store/hook";
 import CategoryIcon from "@mui/icons-material/Category";
 import { Box, Button } from "@mui/material";
 import { useState } from "react";
 
 const MenuCatePage = () => {
   const [open, setOpen] = useState<boolean>(false);
-  const [menuCate, setMenuCate] = useState<Scounter[]>([]);
+  const menuCate = useAppSelector((store) => store.menuCate.item);
   return (
     <>
       <BackOfficeLayout>
@@ -16,11 +16,7 @@ const MenuCatePage = () => {
           <Button onClick={() => setOpen(true)} variant="contained">
             Create Menu Category
           </Button>
-          <CreateMenuCatePage
-            open={open}
-            setOpen={setOpen}
-            setMenuCate={setMenuCate}
-          />
+          <CreateMenuCatePage open={open} setOpen={setOpen} />
         </Box>
         <Box sx={{ mt: 3, ml: 1, display: "flex", flexWrap: "wrap" }}>
           {menuCate.map((menuCate) => (

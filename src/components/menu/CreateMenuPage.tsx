@@ -1,5 +1,7 @@
 import config from "@/config";
-import { Counter, Menus } from "@/types/menuType";
+import { useAppDispatch } from "@/store/hook";
+import { setMenus } from "@/store/slices/menuSlice";
+import { Counter } from "@/types/menuType";
 import {
   Button,
   Dialog,
@@ -12,7 +14,6 @@ import { useState } from "react";
 interface Props {
   open: boolean;
   setOpen: (open: boolean) => void;
-  setMenus: (menus: Menus[]) => void;
 }
 
 const defaultNewMenu = {
@@ -20,8 +21,9 @@ const defaultNewMenu = {
   price: 0,
   img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTndGXBpnkR8gS1I0Mf4Z5OLZygg5qwRIS6rA&usqp=CAU",
 };
-export const CreateMenuPage = ({ open, setOpen, setMenus }: Props) => {
+export const CreateMenuPage = ({ open, setOpen }: Props) => {
   const [newMenu, setNewMenu] = useState<Counter>(defaultNewMenu);
+  const disPatch = useAppDispatch();
 
   const createMenu = async () => {
     const response = await fetch(`${config.apiBaseUrl}/menu`, {
@@ -32,7 +34,7 @@ export const CreateMenuPage = ({ open, setOpen, setMenus }: Props) => {
       body: JSON.stringify(newMenu),
     });
     const dataFromServer = await response.json();
-    setMenus(dataFromServer);
+    disPatch(setMenus(dataFromServer));
     setOpen(false);
     setNewMenu(defaultNewMenu);
   };

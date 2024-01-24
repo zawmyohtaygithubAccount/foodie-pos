@@ -11,7 +11,7 @@ const menu: Menu[] = [];
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
     const isValid = req.body.name;
-    if (!isValid) res.status(400).send("Bad Request");
+    if (!isValid) return res.status(400).send("Bad Request");
     const menuId = menu.length === 0 ? 1 : menu[menu.length - 1].id + 1;
     const newMenu = { ...req.body, id: menuId, isArchive: false };
     menu.push(newMenu);
